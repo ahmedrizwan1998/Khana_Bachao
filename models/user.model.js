@@ -33,7 +33,8 @@ const userSchema = new mongoose.Schema({
     },
     userType: {
         type: String,
-        enum: [USER_TYPES.SOURCE, USER_TYPES.CONSUMER], // enum is used to specify allowed values, like in this case only values that match any on the ones in array would be accepted
+        enum: [USER_TYPES.SOURCE, USER_TYPES.CONSUMER], /*enum is used to specify allowed values, like in this case 
+                                                        only values that match any on the ones in array would be accepted*/
     },
     organization: {
         type: mongoose.Schema.Types.ObjectId,

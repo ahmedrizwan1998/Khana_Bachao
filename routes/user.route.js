@@ -3,6 +3,7 @@ const express = require("express");
 const User = require("../models/user.model");
 const Organization = require('../models/organization.model');
 const { auth } = require("../middleware/auth");
+const { remove, findOne, findByIdAndDelete, findOneAndDelete } = require("../models/user.model");
 
 const router = express.Router();
 
@@ -87,6 +88,12 @@ router.patch('/users', auth, async (req, res) => {
 
 // delete user's profile
 router.delete('/users', auth, async (req, res) => {
+    try {
+        const user = await User.findOneAndDelete({email: req.user.email})
+        res.status(200).send(user);
+    } catch (e) {
+        res.status(400).send(e.message);
+    }
     
 })
 module.exports = router;
