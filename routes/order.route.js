@@ -77,7 +77,28 @@ router.get('/orders/:id', auth, async(req, res) => {
 
 
 // update order
+router.patch('/users:id', auth, consumerAuth, async(req, res) =>{
+    const update = Object.keys(req.body);
+    const allowedUpdates = ['food', 'quantity'];
+    const isValidUpdate = update.every((update) => allowedUpdates.includes(update));
 
+    if (!isValidUpdate) {
+        res.status(400).send("Invalid update option!");
+    }
+
+    try {
+        update.forEach((update) => {
+            req.user[update] = req.body[update];
+        })
+
+        await req.user.save();
+        res.status(200).send(req.user);
+    } catch (e) {
+        res.status(400).send({Error : e.message})
+    }
+
+
+})
 
 // cancel order
 
