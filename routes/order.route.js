@@ -77,9 +77,9 @@ router.get('/orders/:id', auth, async(req, res) => {
 
 
 // update order
-router.patch('/users:id', auth, consumerAuth, async(req, res) =>{
+router.patch('/orders/:id', auth, consumerAuth, async(req, res) =>{
     const update = Object.keys(req.body);
-    const allowedUpdates = ['food', 'quantity'];
+    const allowedUpdates = ['quantity'];
     const isValidUpdate = update.every((update) => allowedUpdates.includes(update));
 
     if (!isValidUpdate) {
@@ -92,15 +92,22 @@ router.patch('/users:id', auth, consumerAuth, async(req, res) =>{
         })
 
         await req.user.save();
-        res.status(200).send(req.user);
+        res.status(200).send("updated");
     } catch (e) {
-        res.status(400).send({Error : e.message})
+        res.status(400).send({Error : e.message});
     }
 
 
 })
 
 // cancel order
-
+router.delete('/orders/:id', auth, consumerAuth, async(req, res) => {
+    try {
+        const order = await Order.findByIdAndDelete({_id: req.params.id});
+        res.status(200).send(order);
+    } catch (e) {
+        res.status(400).send(e.message);
+    }
+})
 
 module.exports = router;
